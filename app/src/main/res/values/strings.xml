@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Mockva Mobile</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Log In</string>
+    <string name="home">Home</string>
+    <string name="accNumber">Account Number</string>
+    <string name="name">Name</string>
+    <string name="balance">Balance</string>
+    <string name="transfer">Transfer</string>
+    <string name="accDestination">Account Destination</string>
+    <string name="accDestinationName">Account Destination Name</string>
+    <string name="amount">Amount</string>
+    <string name="accSource">Account Source</string>
+    <string name="accSourceName">Account Source Name</string>
+    <string name="confirm">Confirm</string>
+    <string name="history">History</string>
+    <string name="refNumber">Reference Number</string>
+    <string name="trxTimeStamp">Transaction Timestamp</string>
+    <string name="status">Status</string>
+    <string name="account">Account</string>
+    <string name="logout">Log Out</string>
+    <string name="data">Data</string>
+    <string name="close">Close</string>
+    <string name="transferReceipt">Transfer Receipt</string>
+</resources>
