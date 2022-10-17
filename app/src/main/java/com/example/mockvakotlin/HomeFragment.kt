@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.mockvakotlin.retrofit.ApiService
-import com.example.mockvakotlin.sharedpref.PrefHelper
+import com.example.mockvakotlin.sharedpref.EncryptSharedPref
 import kotlinx.android.synthetic.main.fragment_home.*
 import model.GetAccountDetailResponse
 import retrofit2.Call
@@ -17,7 +17,7 @@ import retrofit2.Response
 
 class HomeFragment : Fragment() {
 
-    private lateinit var sharedPref: PrefHelper
+    private lateinit var encryptSharedPref: EncryptSharedPref
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -35,9 +35,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPref = PrefHelper(view.context)
-        val sessionId = sharedPref.getSessionId()
-        val accountId = sharedPref.getAccountId()
+        encryptSharedPref = EncryptSharedPref(view.context)
+        val sessionId = encryptSharedPref.getSessionId()
+        val accountId = encryptSharedPref.getAccountId()
 
         ApiService.endpoint.getAccountDetail(sessionId, accountId)
             .enqueue(object : Callback<GetAccountDetailResponse> {
@@ -54,7 +54,8 @@ class HomeFragment : Fragment() {
                             view.context,
                             response.errorBody()?.string(),
                             Toast.LENGTH_LONG
-                        ).show()}
+                        ).show()
+                    }
                 }
 
                 override fun onFailure(call: Call<GetAccountDetailResponse>, t: Throwable) {

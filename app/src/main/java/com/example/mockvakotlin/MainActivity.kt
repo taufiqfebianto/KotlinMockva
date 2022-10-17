@@ -4,11 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mockvakotlin.retrofit.ApiService
-import com.example.mockvakotlin.sharedpref.PrefHelper
-import com.google.gson.Gson
+import com.example.mockvakotlin.sharedpref.EncryptSharedPref
+import com.scottyab.rootbeer.RootBeer
 import kotlinx.android.synthetic.main.activity_main.*
 import model.LoginRequest
 import model.LoginResponse
@@ -16,20 +15,37 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class MainActivity : AppCompatActivity() {
 
-    lateinit var prefHelper: PrefHelper
+    var rootBeer = RootBeer(this)
+
+    //    lateinit var prefHelper: PrefHelper
+    lateinit var encryptSharedPref: EncryptSharedPref
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        prefHelper = PrefHelper(this)
+        encryptSharedPref = EncryptSharedPref(this)
+
+        if (rootBeer.isRootedWithBusyBoxCheck || rootBeer.isRooted) {
+            Toast.makeText(
+                applicationContext,
+                "DEVICE ROOTED",
+                Toast.LENGTH_LONG
+            ).show()
+            finish()
+        } else {
+            Toast.makeText(
+                applicationContext,
+                "DEVICE OK",
+                Toast.LENGTH_LONG
+            ).show()
+
+        }
 
         btnlogin.setOnClickListener {
-
-//            val username = "USER050905"
-//            val password = "tb8450z"
 
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
@@ -59,10 +75,12 @@ class MainActivity : AppCompatActivity() {
                                 response.body()?.accountId.toString(),
                                 true
                             )
+
                             val i = Intent(applicationContext, HomeActivity::class.java)
                             i.flags =
                                 Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(i)
+
                         } else {
 
                             Toast.makeText(
@@ -70,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                                 response.errorBody()?.string(),
                                 Toast.LENGTH_LONG
                             ).show()
+
                         }
 
                     }
@@ -113,9 +132,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveSessionLogin(id: String, accountId: String, statusLogin: Boolean) {
-        prefHelper.setSessionId(id)
-        prefHelper.setAccountId(accountId)
-        prefHelper.setStatusLogin(statusLogin)
+        encryptSharedPref.setSessionId(id)
+        encryptSharedPref.setAccountId(accountId)
     }
 
 }

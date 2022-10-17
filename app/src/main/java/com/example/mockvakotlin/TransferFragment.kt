@@ -7,10 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.example.mockvakotlin.retrofit.ApiService
 import com.example.mockvakotlin.sharedpref.Constant
-import com.example.mockvakotlin.sharedpref.PrefHelper
+import com.example.mockvakotlin.sharedpref.EncryptSharedPref
 import kotlinx.android.synthetic.main.fragment_transfer.*
 import model.TransferInquiryRequest
 import model.TransferInquiryResponse
@@ -18,7 +17,7 @@ import retrofit2.*
 
 class TransferFragment : Fragment() {
 
-    private lateinit var sharedPref: PrefHelper
+    private lateinit var encryptSharedPref: EncryptSharedPref
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +39,10 @@ class TransferFragment : Fragment() {
 
 
 
-        sharedPref = PrefHelper(view.context)
+        encryptSharedPref = EncryptSharedPref(view.context)
 
-        val sessionId = sharedPref.getSessionId()
-        val accountId = sharedPref.getAccountId()
+        val sessionId = encryptSharedPref.getSessionId()
+        val accountId = encryptSharedPref.getAccountId()
 
         etAccountDestination.setText("8258200409103259")
 
@@ -51,10 +50,6 @@ class TransferFragment : Fragment() {
 
             val accountDstId = etAccountDestination.text.toString().trim()
             val amount = etAmount.text.toString().trim()
-
-//            val accountDstId = "8258200409103259"
-//            val accountDstId = "82582004091"
-//            val amount = "1000"
 
             if (accountDstId.isEmpty()) {
                 etAccountDestination.error = "Account destination is required"
@@ -83,11 +78,14 @@ class TransferFragment : Fragment() {
                             }
 
                         } else {
-                            Toast.makeText(
-                                view.context,
-                                response.errorBody()?.string(),
-                                Toast.LENGTH_LONG
-                            ).show()
+//                            Toast.makeText(
+//                                view.context,
+//                                response.errorBody()?.string(),
+//                                Toast.LENGTH_LONG
+//                            ).show()
+                            DialogController.showDialogAlert(
+                                view.context, "", response.errorBody()!!.string()
+                            )
                         }
                     }
 

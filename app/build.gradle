@@ -16,6 +16,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //LocalProperty
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        buildConfigField "String","API_KEY","\"${properties.getProperty("API_KEY")}\""
+        buildConfigField "String","SECRET_KEY","\"${properties.getProperty("SECRET_KEY")}\""
+
     }
 
     buildTypes {
@@ -62,4 +70,10 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+
+    //encrypted shared pref
+    implementation 'androidx.security:security-crypto:1.0.0'
+
+    //root detection
+    implementation 'com.scottyab:rootbeer-lib:0.1.0'
 }

@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.mockvakotlin.retrofit.ApiService
-import com.example.mockvakotlin.sharedpref.PrefHelper
+import com.example.mockvakotlin.sharedpref.EncryptSharedPref
 import kotlinx.android.synthetic.main.fragment_account.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,8 +17,7 @@ import retrofit2.Response
 
 class AccountFragment : Fragment() {
 
-    private lateinit var sharedPref: PrefHelper
-
+    private lateinit var encryptSharedPref: EncryptSharedPref
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,16 +33,15 @@ class AccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sharedPref = PrefHelper(view.context)
-        val sessionId = sharedPref.getSessionId()
+        encryptSharedPref = EncryptSharedPref(view.context)
+        val sessionId = encryptSharedPref.getSessionId()
 
         btnLogout.setOnClickListener {
-//
             ApiService.endpoint.logout(sessionId)
                 .enqueue(object : Callback<Unit> {
                     override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                         if (response.isSuccessful) {
-                            sharedPref.clear()
+                            encryptSharedPref.clearEncryptData()
                             context.let { ctx ->
                                 val i = Intent(ctx, MainActivity::class.java)
                                 i.flags =
@@ -63,9 +61,6 @@ class AccountFragment : Fragment() {
                         Log.e("onFailure", t.cause.toString())
                     }
                 })
-//                .enqueue(object : Call <Unit>{
-//
-//                })
 
         }
     }

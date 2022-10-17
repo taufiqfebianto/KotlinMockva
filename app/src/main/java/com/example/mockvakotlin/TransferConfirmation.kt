@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.mockvakotlin.retrofit.ApiService
 import com.example.mockvakotlin.sharedpref.Constant
-import com.example.mockvakotlin.sharedpref.PrefHelper
+import com.example.mockvakotlin.sharedpref.EncryptSharedPref
 import kotlinx.android.synthetic.main.activity_transfer_confirmation.*
 import model.TransferConfirmationRequest
 import model.TransferConfirmationResponse
@@ -16,7 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private lateinit var sharedPref: PrefHelper
+private lateinit var encryptSharedPref: EncryptSharedPref
 
 class TransferConfirmation : AppCompatActivity() {
 
@@ -27,8 +27,8 @@ class TransferConfirmation : AppCompatActivity() {
         actionbar!!.title = "Transfer"
         actionbar.setDisplayHomeAsUpEnabled(true)
 
-        sharedPref = PrefHelper(this)
-        val sessionId = sharedPref.getSessionId()
+        encryptSharedPref = EncryptSharedPref(this)
+        val sessionId = encryptSharedPref.getSessionId()
 
         val dataInquiry =
             intent?.getParcelableExtra<TransferInquiryResponse>(Constant.PARCELIZE_TRF_INQUIRY)
@@ -54,8 +54,11 @@ class TransferConfirmation : AppCompatActivity() {
                             val i = Intent(applicationContext, TransferReceipt::class.java)
 //                            i.flags =
 //                                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            i.putExtra(Constant.ACC_SRC_NAME,etAccountSourceName.text.toString())
-                            i.putExtra(Constant.ACC_DST_NAME,etAccountDestinationName.text.toString())
+                            i.putExtra(Constant.ACC_SRC_NAME, etAccountSourceName.text.toString())
+                            i.putExtra(
+                                Constant.ACC_DST_NAME,
+                                etAccountDestinationName.text.toString()
+                            )
                             i.putExtra(Constant.PARCELIZE_TRF_CONFIRMATION, response.body())
                             startActivity(i)
                         } else {
@@ -72,7 +75,6 @@ class TransferConfirmation : AppCompatActivity() {
                     }
                 })
         }
-
 
 
     }
